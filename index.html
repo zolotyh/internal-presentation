@@ -1,0 +1,368 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+        <script src="js/chunk.js"></script>
+        <script src="js/main.js"></script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section  data-background-transition="fade">
+                    <h1>
+                        New frontend design proposal<span class="a1">.</span>
+                    </h1>
+                    <h5>Alexey Zolotykh</h5>
+                </section>
+                <section>
+                    <p>
+                        <img src="img/1500x500.jpeg" alt="">
+                    </p>
+                    Alexey Zolotykh, TL of Sputnik team, Frontender, Speaker
+                </section>
+                <section>
+                    <img src="img/poll.png" alt=""/>
+                </section>
+                <section data-background-color="#000"  data-background-transition="fade">
+                   <h5>
+                       Caution! Personal opinion. I don't want to hurt anybody. I'm not criticizing persons, but the way things are...
+                   </h5>
+                </section>
+                <section>
+                    <h4>Why frontend is so important</h4>
+                </section>
+                <section>
+                    <h4>How out customers see our product</h4>
+                    <iframe src="https://www.youtube.com/embed/1fof3LHjrKU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </section>
+				<section >
+                    <h3>
+                        Our UX is...
+                    </h3>
+                    <div class="frontend" style="font-size: 2em">
+                        💩
+                    </div>
+                </section>
+                <section>
+                    <h3>
+                        Why is that?
+                    </h3>
+                </section>
+                <section>
+                    <img src="./img/download.jpeg" alt=""/>
+                </section>
+                <section>
+                    <h3>5 why</h3>
+                    <ol>
+                        <li class="fragment">Misuse of NodeJS</li>
+                        <li class="fragment">Overengineering</li>
+                        <li class="fragment">No strategy for frontend</li>
+                        <li class="fragment">No architect</li>
+                        <li class="fragment">We don't care about our UI</li>
+                    </ol>
+                </section>
+                <section>
+                    <h4>1. Misuse of NodeJS</h4>
+                </section>
+                <section>
+                    <img src="img/2.png" alt=""/>
+                </section>
+                <section>
+                    <img src="img/1.png" alt=""/>
+                </section>
+                <section>
+                    <img src="img/code.png" alt=""/>
+                </section>
+                <section>
+                    <img style="max-height: 60vh" src="img/node.png" alt=""/>
+                </section>
+                <section>
+                    NodeJS for config generation
+                </section>
+                <section>
+                    <p>Placeholders and URLs</p>
+                    <img src="img/cinfig.png" alt=""/>
+                </section>
+                <section>
+                    <h3>
+                        Placeholders
+                    </h3>
+                </section>
+                <section>
+                    <h4>Now</h4>
+                    ./etc/config.json
+                </section>
+                <section>
+                    <pre><code>
+'use strict'
+
+// TODO: remove from production build package data
+const pkg = require('../package')
+const appPrefix = 'APP_URL_PREFIX' || pkg.prefix
+const apiPrefix = ['/', appPrefix, '/api'].join('')
+
+module.exports = {
+    log: {
+        name: pkg.name,
+        location: 'SERVICE_LOG_ROOT',
+        types: ['audit', 'error'],
+        graylogHost: 'GRAYLOG_HOST',
+    },
+
+    redis: {
+        port: REDIS_PORT,
+        host: 'REDIS_HOST',
+        options: {},
+        sentinel: CUP_REDIS_SENTINEL_ENABLED,
+        sentinelHosts: 'CUP_REDIS_SENTINEL_HOSTS',
+        masterName: 'CUP_REDIS_MASTER_NAME',
+    },
+
+    port: HTTP_PORT,
+    hostName: '0.0.0.0',
+    protocol: 'PROTOCOL',
+    prefix: 'APP_URL_PREFIX',
+
+    appId: APPLICATION_ID,
+    parsecoAuthAppId PARSECO_AUTH_APP_ID,
+    permissionApplicationId: PERMISSION_APPLICATION_ID,
+    remoteInvocationContextCredentials: 'REMOTE_INVOCATION_CONTEXT_CREDENTIALS',
+    featureApiIntegration: 'FEATURE_API_INTEGRATION',
+
+    segmentEnabled: CUP_SEGMENT_ENABLED,
+    segmentWriteKey: 'CUP_SEGMENT_WRITE_KEY',
+    authCookieReferrers: [CUP_AUTH_REFERRERS_LIST],
+
+    //= =================== SERVER SIDE CALLS ====================',
+    loginUrl: 'CUP_LOGIN_URL',
+    logoutUrl: 'CUP_LOGOUT_URL',
+    scUrl: 'CUP_SC_URL',
+    permUrl: 'SC_PERMISSIONS_URL',
+    permsUrl: 'CUP_GET_PERMISSIONS_URL', // permUrl config value will be removed soon
+    cupPermissionsUrl: 'CUP_PERMISSIONS_URL',
+    amsUrl: 'AMS_URL',
+    resolveUserUrl: 'CUP_RESOLVE_USER_URL',
+    resolveAccountUrl: 'CUP_RESOLVE_ACCOUNT_URL',
+    billingUrl: 'BILLING_URL',
+    internalIamUrl: 'INTERNAL_IAM_URL',
+    internalMessagingApiPath: 'CUP_INTERNAL_IAM4W_URL',
+    internalSettingsApiPath: 'INTERNAL_SETTINGS_API_URL',
+    timezoneServiceUrl: 'TIME_ZONES_SERVICE_URL',
+    domainAccessUrl: 'CUP_SC_DOMAIN_CHECK_URL',
+    campaignServiceUrl: 'CAMPAIGN_SERVICE_URL',
+    cupReportsServiceUrl: 'CUP_REPORTS_SERVICE_URL',
+    conversationServiceUrl: 'CUP_CONVERSATION_SERVICE_URL',
+
+    //= =================== AJAX CALLS ====================',
+    apiTimeout: AJAX_OPTIONS_TIMEOUT,
+    iamUrl: apiPrefix + '/iam',
+    internalIamProxiedUrl: apiPrefix + '/internalIam',
+    smsApiUrl: apiPrefix + '/sms',
+    subscribersApiPath: apiPrefix + '/subscribers',
+    settingsApiPath: apiPrefix + '/settings',
+    pushApiUrl: apiPrefix + '/push',
+    internalApiUrl: 'INTERNAL_API_URL',
+    apiUrl: 'https://oneapi.ioinfobip.com/portal',
+
+    // ===================== API PROXY =====================',
+    apiProxy: {
+        apiPrefix,
+        routes: [
+            {
+                name: 'iam api',
+                remote: 'IAM_URL',
+                local: 'iam',
+            },
+            {
+                name: 'settings api',
+                remote: 'CUP_SETTINGS_API_URL',
+                local: 'settings',
+            },
+            {
+                name: 'internal iam api',
+                remote: {
+                    protocol: 'http',
+                    hostname: 'INTERNAL_IAM_PROXIED_URL',
+                },
+                local: 'internalIam',
+            },
+            {
+                name: 'sms api',
+                remote: 'MESSAGING_API_URL',
+                local: 'sms',
+            },
+        ],
+    },
+
+    //= =================== REDIRECTS ====================',
+    topupUrl: 'TOPUP_URL',
+    paymentsUrl: 'CUP_PAYMENTS_URL',
+    accountsUrl: 'ACCOUNTS_URL',
+    reportingUrl: 'CUP_REPORTING_URL',
+    subscribersUrl: 'CUP_SUBSCRIBERS_URL',
+    dashboardUrl: 'CUP_DASHBOARD_URL',
+    smsUrl: 'CUP_SMS_URL',
+    ussdUrl: 'USSD_URL',
+    settingsUrl: 'CUP_SETTINGS_URL',
+    supportUrl: 'CUP_SUPPORT_URL',
+    parsecoUrl: 'PARSECO_URL',
+    pushUrl: 'CUP_PUSH_URL',
+    voiceUrl: 'CUP_VOICE_URL',
+    omniUrl: 'OMNI_URL',
+    roundaboutUrl: 'CUP_ROUNDABOUT_URL',
+    emailUrl: 'CUP_EMAIL_URL',
+    onboardingUrl: 'CUP_ONBOARDING_URL',
+    peopleUrl: 'CUP_PEOPLE_URL',
+    templatesUrl: 'CUP_TEMPLATES_URL',
+    homeDashboardUrl: 'CUP_HOME_DASHBOARD_URL',
+    analyticsPartnerLogsUrl: 'CUP_ANALYTICS_PARTNER_LOGS_URL',
+    appsUrl: 'CUP_APPS_URL',
+    trackUsers: true,
+    dateTimeFormat: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
+
+    cdnHost: 'CUP_CDN_HOST',
+    cdnPrefix: pkg.prefix,
+}
+:
+                    </code></pre>
+                </section>
+                <section>
+                    <h4>Must be</h4>
+                    <p>.env</p>
+                    <pre><code data-trim>
+                    API_KEYS_PAGE_URL='/api-keys'
+                    API_KEYS_API_URL='/api-keys/api'
+                    </code></pre>
+                </section>
+                <section>
+                     <h4>
+                         URLs are not needed
+                     </h4>
+                     <p class="fragment">All stuff should works with one domain</p>
+                </section>
+                <section>
+                    <h4>Overengineering</h4>
+                </section>
+                <section>
+                    Config journey
+                </section>
+                <section>
+                    IbNavigation
+                </section>
+                <section>
+                    <pre><code data-trim>
+    const scripts = ibNavigation?.links?.scripts
+    if (!scripts) {
+        Logger.error(
+            "Cannot render navbar\n Link to navigation script don't exists. Please, check configuration"
+        )
+        return
+    }
+    const links = scripts.map(url =&gt; ({ url }))
+
+    await loadJs(links)
+
+    const Navigation = window?.IbNavigation?.default
+    if (!Navigation) {
+        Logger.error(
+            "Cannot render navbar\n IbNavigation wasn't loaded properly"
+        )
+        return
+    }
+
+    Logger.info('Navbar was load, initializing...')
+    ReactDOM.render(
+        &lt;Navigation {...config} /&gt;,
+        document.getElementById(navbarElementId)
+    )
+    Logger.info('Navbar rendered.')
+                    </code></pre>
+                </section>
+                <section>
+                    <img src="img/version.png" alt=""/>
+                </section>
+                <section>
+                    <h4>Some funny facts</h4>
+                    <ul>
+                    <li class="fragment">
+                        20 services
+                    </li>
+                    <li class="fragment"> 1 gb and 1 core per service</li>
+                    <li class="fragment">2 insances per DC</li>
+                    <li class="fragment">3 DC</li>
+                    <li class="fragment">20 * 2 * 3 = 120 GB + 120 cores</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Overkill?</h3>
+                    <p class="fragment">Maybe we have 60,000RPS?</p>
+                    <img class="fragment" src="img/load.png" alt=""/>
+                </section>
+                <section>
+                    <h1>
+                        We have to remove node.js
+                    </h1>
+                </section>
+                <section>
+                    <img src="img/new.png" alt=""/>
+                </section>
+                <section>
+                    <h4>No strategy for frontend</h4>
+                </section>
+                <section>
+                    <img src="img/tasks.png" alt=""/>
+                </section>
+                <section>
+                    <h4>No architect</h4>
+                    <p class="fragment">Who is responsible for frontends?</p>
+                </section>
+                <section>
+                    <h4>We don't care about our UI</h4>
+                </section>
+                <section>
+                    <h3>I look to the future with hope and hope that this will change soon</h3>
+                </section>
+                <section>
+                    Tnx
+                </section>
+			</div>
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+                hash: true,
+                progress: true,
+                controls: false,
+                pageNumbers: true,
+                slideNumber: true,
+				dependencies: [
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
